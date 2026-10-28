@@ -1,6 +1,9 @@
 //> using platform js
 //> using dep com.armanbilge::calico::0.2.3
 //> using dep com.armanbilge::calico-router::0.2.3
+//> using dep io.circe::circe-parser::0.14.10
+//> using dep org.http4s::http4s-dom::0.2.12
+//> using dep org.http4s::http4s-circe::0.23.30
 //> using jsModuleKind es
 
 import calico.*
@@ -50,5 +53,6 @@ object WorkshopApp extends IOWebApp:
     Widget("Shell Game", "shell", w2),
     Widget("Málaga Wine Lab", "malaga", malaga),
     Widget("Fibonacci", "fibonacci", fibonacci),
-    Widget("Scala UI with Calico Development Skill Tree", "skill-tree", skillTree)
+    Widget("Scala UI with Calico Development Skill Tree", "skill-tree", skillTree),
+    Widget("Jokes list", "jokes", jokes)
   )
