@@ -2675,6 +2675,18 @@ function $m_Lcats_effect_std_Queue$() {
   }
   return $n_Lcats_effect_std_Queue$;
 }
+function $is_Lcats_effect_std_Random(obj) {
+  return (!(!((obj && obj.$classData) && obj.$classData.ancestors.Lcats_effect_std_Random)));
+}
+function $as_Lcats_effect_std_Random(obj) {
+  return (($is_Lcats_effect_std_Random(obj) || (obj === null)) ? obj : $throwClassCastException(obj, "cats.effect.std.Random"));
+}
+function $isArrayOf_Lcats_effect_std_Random(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lcats_effect_std_Random)));
+}
+function $asArrayOf_Lcats_effect_std_Random(obj, depth) {
+  return (($isArrayOf_Lcats_effect_std_Random(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lcats.effect.std.Random;", depth));
+}
 /** @constructor */
 function $c_Lcats_effect_std_Semaphore() {
 }
@@ -27703,6 +27715,196 @@ $c_s_util_hashing_MurmurHash3.prototype.listHash__sci_List__I__I = (function(xs,
   }
   return ((rangeState === 2) ? this.rangeHash__I__I__I__I__I(initial, rangeDiff, prev, seed) : this.finalizeHash__I__I__I(h, n));
 });
+function $p_Lshell$package$__choose$1__Lfs2_concurrent_SignallingRef__Lfs2_concurrent_SignallingRef__I__Lcats_effect_IO($thiz, ball$2, result$1, glass) {
+  return $n($as_Lcats_effect_IO($n(ball$2).get__O())).flatMap__F1__Lcats_effect_IO(new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((hidden$3) => {
+    var hidden$2 = $uI(hidden$3);
+    var value = (hidden$2 === glass);
+    return $as_Lcats_effect_IO($n(result$1).set__O__O(new $c_s_Some(value)));
+  })));
+}
+/** @constructor */
+function $c_Lshell$package$() {
+}
+$c_Lshell$package$.prototype = new $h_O();
+$c_Lshell$package$.prototype.constructor = $c_Lshell$package$;
+/** @constructor */
+function $h_Lshell$package$() {
+}
+$h_Lshell$package$.prototype = $c_Lshell$package$.prototype;
+$c_Lshell$package$.prototype.w2__Lcats_effect_kernel_Resource = (function() {
+  var this$1 = $n($as_Lcats_effect_IO($m_Lcats_effect_std_Random$().scalaUtilRandom__Lcats_effect_kernel_Sync__O($m_Lcats_effect_IO$().Lcats_effect_IO$__f__asyncForIO)));
+  var this$49 = new $c_Lcats_effect_kernel_Resource$Eval(this$1);
+  var f$5 = new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((random$2) => {
+    var random = $as_Lcats_effect_std_Random(random$2);
+    var this$5 = $n($as_Lcats_effect_IO($n(random).nextIntBounded__I__O(3)));
+    var this$47 = new $c_Lcats_effect_kernel_Resource$Eval(this$5);
+    var f$4 = new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((winner$3) => {
+      var winner$2 = $uI(winner$3);
+      var F = $m_Lcats_effect_IO$().Lcats_effect_IO$__f__asyncForIO;
+      var this$10 = $n($as_Lcats_effect_IO($m_Lfs2_concurrent_SignallingRef$().of__O__Lcats_effect_kernel_GenConcurrent__O(winner$2, F)));
+      var this$45 = new $c_Lcats_effect_kernel_Resource$Eval(this$10);
+      var f$3 = new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((ball$2) => {
+        var ball = $as_Lfs2_concurrent_SignallingRef(ball$2);
+        var initial = $m_s_None$();
+        var F$1 = $m_Lcats_effect_IO$().Lcats_effect_IO$__f__asyncForIO;
+        var this$15 = $n($as_Lcats_effect_IO($m_Lfs2_concurrent_SignallingRef$().of__O__Lcats_effect_kernel_GenConcurrent__O(initial, F$1)));
+        var this$43 = new $c_Lcats_effect_kernel_Resource$Eval(this$15);
+        var f$2 = new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((result$2) => {
+          var result = $as_Lfs2_concurrent_SignallingRef(result$2);
+          var colors = new $c_sci_$colon$colon("lightcoral", new $c_sci_$colon$colon("lightblue", new $c_sci_$colon$colon("lightgreen", $m_sci_Nil$())));
+          var $x_12 = $n($m_Lcalico_html_io$().div__Lcalico_html_HtmlTag());
+          var $x_1 = $n($m_Lcalico_html_io$().p__Lcalico_html_HtmlTag());
+          var Modifiers_this = $m_Lcalico_html_io$();
+          var _1$2 = $x_1.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource("Pick a glass:", Modifiers_this.Lcalico_html_Html__f_calico$html$Modifiers$$_forString);
+          var $x_6 = $n($m_Lcalico_html_io$().div__Lcalico_html_HtmlTag());
+          $m_sci_List$();
+          var this$23 = $m_sci_Nil$();
+          var iter = new $c_sci_RangeIterator(0, 1, 2, false);
+          if (iter.sci_RangeIterator__f__hasNext) {
+            var result$1 = new $c_sci_$colon$colon(iter.next__I(), this$23);
+            var curr = result$1;
+            while (iter.sci_RangeIterator__f__hasNext) {
+              var temp = new $c_sci_$colon$colon(iter.next__I(), this$23);
+              $n(curr).sci_$colon$colon__f_next = temp;
+              curr = temp;
+            }
+            var this$30 = result$1;
+          } else {
+            var this$30 = this$23;
+          }
+          var f = ((glass$3) => {
+            var glass$2 = $uI(glass$3);
+            var $x_3 = $n($m_Lcalico_html_io$().button__Lcalico_html_HtmlTag());
+            $m_Lcalico_html_io$();
+            var this$25 = new $c_Lcalico_html_HtmlAttr("style", $m_Lcalico_html_encoders$().Lcalico_html_encoders$__f__identity);
+            var v = (("background-color: " + $f_sc_LinearSeqOps__apply__I__O(colors, glass$2)) + "; min-width: 100px");
+            var _1 = new $c_Lcalico_html_HtmlAttr$ConstantModifier(this$25.Lcalico_html_HtmlAttr__f_key, this$25.Lcalico_html_HtmlAttr__f_encode, v);
+            var this$26 = $n($m_Lcalico_html_io$().onClick__Lcalico_html_EventProp());
+            var fu = $p_Lshell$package$__choose$1__Lfs2_concurrent_SignallingRef__Lfs2_concurrent_SignallingRef__I__Lcats_effect_IO(this, ball, result, glass$2);
+            var sink = new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((_$16) => {
+              var _$16$1 = $as_Lfs2_Stream(_$16);
+              return $n(_$16$1).foreach__F1__Lfs2_Stream(new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((_$17) => fu)));
+            }));
+            var _2 = new $c_Lcalico_html_EventProp$PipeModifier(this$26.Lcalico_html_EventProp__f_key, $n(this$26.Lcalico_html_EventProp__f_pipe).andThen__F1__F1(sink));
+            var _3 = ("Glass " + ((1 + glass$2) | 0));
+            var $x_2 = new $c_T3(_1, _2, _3);
+            var gen$proxy1 = new $c_sr_TupleMirror(3);
+            var is = new $c_sr_AbstractFunction0_$$Lambda$07eded5776954a9c145e92c329afd52873ad179c((() => {
+              var arr$proxy1 = new $ac_O(3);
+              var HtmlAttrModifiers_this = $m_Lcalico_html_io$();
+              arr$proxy1.set(0, HtmlAttrModifiers_this.Lcalico_html_Html__f_calico$html$HtmlAttrModifiers$$_forConstantHtmlAttr);
+              var EventPropModifiers_this = $m_Lcalico_html_io$();
+              arr$proxy1.set(1, EventPropModifiers_this.Lcalico_html_Html__f_calico$html$EventPropModifiers$$_forPipeEventProp);
+              var Modifiers_this$1 = $m_Lcalico_html_io$();
+              arr$proxy1.set(2, Modifiers_this$1.Lcalico_html_Html__f_calico$html$Modifiers$$_forString);
+              return arr$proxy1;
+            }));
+            var inst = new $c_Lshapeless3_deriving_internals_ErasedProductInstancesN(gen$proxy1, is);
+            return $x_3.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource($x_2, new $c_Lcalico_html_Modifier$$anon$5(inst));
+          });
+          if ((this$30 === $m_sci_Nil$())) {
+            var $x_5 = $m_sci_Nil$();
+          } else {
+            var x0 = this$30.head__O();
+            var h = new $c_sci_$colon$colon(f(x0), $m_sci_Nil$());
+            var t = h;
+            var rest = $as_sci_List(this$30.tail__O());
+            while ((rest !== $m_sci_Nil$())) {
+              var x0$1 = $n(rest).head__O();
+              var nx = new $c_sci_$colon$colon(f(x0$1), $m_sci_Nil$());
+              $n(t).sci_$colon$colon__f_next = nx;
+              t = nx;
+              rest = $as_sci_List($n(rest).tail__O());
+            }
+            var $x_5 = h;
+          }
+          var $x_4 = $as_sci_List($x_5);
+          var Modifiers_this$2 = $m_Lcalico_html_io$();
+          var M = Modifiers_this$2.Lcalico_html_Html__f_calico$html$Modifiers$$_forNodeResource;
+          var _2$1 = $x_6.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource($x_4, new $c_Lcalico_html_Modifier$$anon$7(M));
+          var $x_8 = $n($m_Lcalico_html_io$().p__Lcalico_html_HtmlTag());
+          var f$1 = new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((x$1$2) => {
+            var x$1 = $as_s_Option(x$1$2);
+            if ((x$1 instanceof $c_s_Some)) {
+              var x5 = $uZ($n($as_s_Some(x$1)).s_Some__f_value);
+              if (x5) {
+                return "You won!";
+              }
+              if ((!x5)) {
+                return "You lost!";
+              }
+            }
+            var x = $m_s_None$();
+            if ((x === x$1)) {
+              return "";
+            }
+            throw new $c_s_MatchError(x$1);
+          }));
+          var F$2 = $m_Lcats_effect_IO$().Lcats_effect_IO$__f__asyncForIO;
+          var this$34 = $m_Lfs2_concurrent_Signal$();
+          var $x_7 = new $c_Lfs2_concurrent_Signal$$anon$3(result, f$1, F$2, this$34);
+          var Modifiers_this$3 = $m_Lcalico_html_io$();
+          var _3$1 = $x_8.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource($x_7, Modifiers_this$3.Lcalico_html_Html__f_calico$html$Modifiers$$_forStringSignal);
+          var $x_10 = $n($m_Lcalico_html_io$().button__Lcalico_html_HtmlTag());
+          var this$36 = $n($m_Lcalico_html_io$().onClick__Lcalico_html_EventProp());
+          var fu$1 = $n($as_Lcats_effect_IO($n(random).nextIntBounded__I__O(3))).flatMap__F1__Lcats_effect_IO(new $c_sr_AbstractFunction1_$$Lambda$7afc3dd0acc1681fb022ef921c83979087aaa919(((newWinner$3) => {
+            var newWinner$2 = $uI(newWinner$3);
+            var this$35 = $n($as_Lcats_effect_IO($n(ball).set__O__O(newWinner$2)));
+            var that = $as_Lcats_effect_IO($n(result).set__O__O($m_s_None$()));
+            return this$35.productR__Lcats_effect_IO__Lcats_effect_IO(that);
+          })));
+          var sink$1 = new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((_$16$2) => {
+            var _$16$3 = $as_Lfs2_Stream(_$16$2);
+            return $n(_$16$3).foreach__F1__Lfs2_Stream(new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((_$17$1) => fu$1)));
+          }));
+          var _1$1 = new $c_Lcalico_html_EventProp$PipeModifier(this$36.Lcalico_html_EventProp__f_key, $n(this$36.Lcalico_html_EventProp__f_pipe).andThen__F1__F1(sink$1));
+          var $x_9 = new $c_T2(_1$1, "Reset");
+          var gen$proxy2 = new $c_sr_TupleMirror(2);
+          var is$1 = new $c_sr_AbstractFunction0_$$Lambda$07eded5776954a9c145e92c329afd52873ad179c((() => {
+            var arr$proxy2 = new $ac_O(2);
+            var EventPropModifiers_this$1 = $m_Lcalico_html_io$();
+            arr$proxy2.set(0, EventPropModifiers_this$1.Lcalico_html_Html__f_calico$html$EventPropModifiers$$_forPipeEventProp);
+            var Modifiers_this$4 = $m_Lcalico_html_io$();
+            arr$proxy2.set(1, Modifiers_this$4.Lcalico_html_Html__f_calico$html$Modifiers$$_forString);
+            return arr$proxy2;
+          }));
+          var inst$1 = new $c_Lshapeless3_deriving_internals_ErasedProductInstancesN(gen$proxy2, is$1);
+          var _4 = $x_10.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource($x_9, new $c_Lcalico_html_Modifier$$anon$5(inst$1));
+          var $x_11 = new $c_T4(_1$2, _2$1, _3$1, _4);
+          var gen$proxy3 = new $c_sr_TupleMirror(4);
+          var is$2 = new $c_sr_AbstractFunction0_$$Lambda$07eded5776954a9c145e92c329afd52873ad179c((() => {
+            var arr$proxy3 = new $ac_O(4);
+            var Modifiers_this$5 = $m_Lcalico_html_io$();
+            arr$proxy3.set(0, Modifiers_this$5.Lcalico_html_Html__f_calico$html$Modifiers$$_forNodeResource);
+            var Modifiers_this$2$1 = $m_Lcalico_html_io$();
+            arr$proxy3.set(1, Modifiers_this$2$1.Lcalico_html_Html__f_calico$html$Modifiers$$_forNodeResource);
+            var Modifiers_this$3$1 = $m_Lcalico_html_io$();
+            arr$proxy3.set(2, Modifiers_this$3$1.Lcalico_html_Html__f_calico$html$Modifiers$$_forNodeResource);
+            var Modifiers_this$4$1 = $m_Lcalico_html_io$();
+            arr$proxy3.set(3, Modifiers_this$4$1.Lcalico_html_Html__f_calico$html$Modifiers$$_forNodeResource);
+            return arr$proxy3;
+          }));
+          var inst$2 = new $c_Lshapeless3_deriving_internals_ErasedProductInstancesN(gen$proxy3, is$2);
+          return $x_12.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource($x_11, new $c_Lcalico_html_Modifier$$anon$5(inst$2));
+        }));
+        return new $c_Lcats_effect_kernel_Resource$Bind(this$43, f$2);
+      }));
+      return new $c_Lcats_effect_kernel_Resource$Bind(this$45, f$3);
+    }));
+    return new $c_Lcats_effect_kernel_Resource$Bind(this$47, f$4);
+  }));
+  return new $c_Lcats_effect_kernel_Resource$Bind(this$49, f$5);
+});
+var $d_Lshell$package$ = new $TypeData().initClass($c_Lshell$package$, "shell$package$", ({
+  Lshell$package$: 1
+}));
+var $n_Lshell$package$;
+function $m_Lshell$package$() {
+  if ((!$n_Lshell$package$)) {
+    $n_Lshell$package$ = new $c_Lshell$package$();
+  }
+  return $n_Lshell$package$;
+}
 function $p_LWorkshopApp$__widgetUri$1__T__Lorg_http4s_Uri($thiz, id) {
   var this$4 = $n($m_Lorg_http4s_Uri$().unsafeFromString__T__Lorg_http4s_Uri(""));
   var evidence$1 = $m_Lorg_http4s_QueryParamKeyLike$().Lorg_http4s_QueryParamKeyLike$__f_stringKey;
@@ -27907,12 +28109,14 @@ $c_LWorkshopApp$.prototype.widgets__Lcats_data_NonEmptyList = (function() {
   $m_Lcats_data_NonEmptyList$();
   var content = $m_Loz$package$().oz__Lcats_effect_kernel_Resource();
   var head = new $c_LWorkshopApp$Widget("Dorothy", "oz", content);
+  var content$1 = $m_Lshell$package$().w2__Lcats_effect_kernel_Resource();
+  var x0 = new $c_LWorkshopApp$Widget("Shell Game", "shell", content$1);
+  var array = [x0];
+  var tail = $ct_sjsr_WrappedVarArgs__sjs_js_Array__(new $c_sjsr_WrappedVarArgs(), array);
   $m_Lcats_data_NonEmptyList$();
   $m_sci_List$();
-  var this$7 = $m_sci_Nil$();
-  var tail;
-  var tail = this$7;
-  return new $c_Lcats_data_NonEmptyList(head, tail);
+  var tail$1 = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(tail);
+  return new $c_Lcats_data_NonEmptyList(head, tail$1);
 });
 var $d_LWorkshopApp$ = new $TypeData().initClass($c_LWorkshopApp$, "WorkshopApp$", ({
   LWorkshopApp$: 1,
@@ -30823,6 +31027,44 @@ var $d_Lcats_effect_std_EnvCompanionPlatform$SyncEnv = new $TypeData().initClass
   Lcats_effect_std_EnvCompanionPlatform$SyncEnv: 1,
   Lcats_effect_std_Env: 1
 }));
+/** @constructor */
+function $c_Lcats_effect_std_Random$() {
+}
+$c_Lcats_effect_std_Random$.prototype = new $h_O();
+$c_Lcats_effect_std_Random$.prototype.constructor = $c_Lcats_effect_std_Random$;
+/** @constructor */
+function $h_Lcats_effect_std_Random$() {
+}
+$h_Lcats_effect_std_Random$.prototype = $c_Lcats_effect_std_Random$.prototype;
+$c_Lcats_effect_std_Random$.prototype.scalaUtilRandom__Lcats_effect_kernel_Sync__O = (function(evidence$1) {
+  return $n(evidence$1).delay__F0__O(new $c_sjsr_AnonFunction0_$$Lambda$2bf0f8dc580d6edeb2d6a336c52a1bab3049702d((() => {
+    var sRandom = $ct_s_util_Random__(new $c_s_util_Random());
+    return new $c_Lcats_effect_std_Random$$anon$2(evidence$1, sRandom);
+  })));
+});
+var $d_Lcats_effect_std_Random$ = new $TypeData().initClass($c_Lcats_effect_std_Random$, "cats.effect.std.Random$", ({
+  Lcats_effect_std_Random$: 1,
+  Lcats_effect_std_RandomCompanionPlatform: 1
+}));
+var $n_Lcats_effect_std_Random$;
+function $m_Lcats_effect_std_Random$() {
+  if ((!$n_Lcats_effect_std_Random$)) {
+    $n_Lcats_effect_std_Random$ = new $c_Lcats_effect_std_Random$();
+  }
+  return $n_Lcats_effect_std_Random$;
+}
+function $ct_Lcats_effect_std_Random$RandomCommon__Lcats_effect_kernel_Sync__($thiz, evidence$24) {
+  return $thiz;
+}
+/** @constructor */
+function $c_Lcats_effect_std_Random$RandomCommon() {
+}
+$c_Lcats_effect_std_Random$RandomCommon.prototype = new $h_O();
+$c_Lcats_effect_std_Random$RandomCommon.prototype.constructor = $c_Lcats_effect_std_Random$RandomCommon;
+/** @constructor */
+function $h_Lcats_effect_std_Random$RandomCommon() {
+}
+$h_Lcats_effect_std_Random$RandomCommon.prototype = $c_Lcats_effect_std_Random$RandomCommon.prototype;
 /** @constructor */
 function $c_Lcats_effect_std_Semaphore$impl$$anon$1(state$2, outer) {
   this.Lcats_effect_std_Semaphore$impl$$anon$1__f_state$1 = null;
@@ -39631,6 +39873,10 @@ function $ct_s_util_Random__ju_Random__($thiz, self) {
   $thiz.s_util_Random__f_self = self;
   return $thiz;
 }
+function $ct_s_util_Random__($thiz) {
+  $ct_s_util_Random__ju_Random__($thiz, $ct_ju_Random__(new $c_ju_Random()));
+  return $thiz;
+}
 /** @constructor */
 function $c_s_util_Random() {
   this.s_util_Random__f_self = null;
@@ -39641,6 +39887,19 @@ $c_s_util_Random.prototype.constructor = $c_s_util_Random;
 function $h_s_util_Random() {
 }
 $h_s_util_Random.prototype = $c_s_util_Random.prototype;
+function $as_s_util_Random(obj) {
+  return (((obj instanceof $c_s_util_Random) || (obj === null)) ? obj : $throwClassCastException(obj, "scala.util.Random"));
+}
+function $isArrayOf_s_util_Random(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.s_util_Random)));
+}
+function $asArrayOf_s_util_Random(obj, depth) {
+  return (($isArrayOf_s_util_Random(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.util.Random;", depth));
+}
+var $d_s_util_Random = new $TypeData().initClass($c_s_util_Random, "scala.util.Random", ({
+  s_util_Random: 1,
+  Ljava_io_Serializable: 1
+}));
 /** @constructor */
 function $c_s_util_hashing_MurmurHash3$() {
   this.s_util_hashing_MurmurHash3$__f_seqSeed = 0;
@@ -41065,6 +41324,41 @@ function $isArrayOf_Lcats_effect_std_Queue(obj, depth) {
 function $asArrayOf_Lcats_effect_std_Queue(obj, depth) {
   return (($isArrayOf_Lcats_effect_std_Queue(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lcats.effect.std.Queue;", depth));
 }
+function $ct_Lcats_effect_std_Random$ScalaRandom__O__Lcats_effect_kernel_Sync__($thiz, f, evidence$25) {
+  $thiz.Lcats_effect_std_Random$ScalaRandom__f_f = f;
+  $thiz.Lcats_effect_std_Random$ScalaRandom__f_evidence$25 = evidence$25;
+  $ct_Lcats_effect_std_Random$RandomCommon__Lcats_effect_kernel_Sync__($thiz, evidence$25);
+  return $thiz;
+}
+/** @constructor */
+function $c_Lcats_effect_std_Random$ScalaRandom() {
+  this.Lcats_effect_std_Random$ScalaRandom__f_f = null;
+  this.Lcats_effect_std_Random$ScalaRandom__f_evidence$25 = null;
+}
+$c_Lcats_effect_std_Random$ScalaRandom.prototype = new $h_Lcats_effect_std_Random$RandomCommon();
+$c_Lcats_effect_std_Random$ScalaRandom.prototype.constructor = $c_Lcats_effect_std_Random$ScalaRandom;
+/** @constructor */
+function $h_Lcats_effect_std_Random$ScalaRandom() {
+}
+$h_Lcats_effect_std_Random$ScalaRandom.prototype = $c_Lcats_effect_std_Random$ScalaRandom.prototype;
+$c_Lcats_effect_std_Random$ScalaRandom.prototype.nextIntBounded__I__O = (function(n) {
+  var target = this.Lcats_effect_std_Random$ScalaRandom__f_f;
+  var tc = this.Lcats_effect_std_Random$ScalaRandom__f_evidence$25;
+  var this$6 = new $c_Lcats_FlatMap$ToFlatMapOps$$anon$2(target, tc);
+  var f$1 = new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((r) => {
+    var r$1 = $as_s_util_Random(r);
+    var F = this.Lcats_effect_std_Random$ScalaRandom__f_evidence$25;
+    var target$1 = $n(F).delay__F0__O(new $c_sjsr_AnonFunction0_$$Lambda$2bf0f8dc580d6edeb2d6a336c52a1bab3049702d((() => $n($n(r$1).s_util_Random__f_self).nextInt__I__I(n))));
+    var tc$1 = this.Lcats_effect_std_Random$ScalaRandom__f_evidence$25;
+    var this$5 = new $c_Lcats_Functor$ToFunctorOps$$anon$5(target$1, tc$1);
+    var f = new $c_sjsr_AnonFunction1_$$Lambda$412915ce24663401f4bc24349a746e1dbd693dc1(((out) => {
+      var out$1 = $uI(out);
+      return out$1;
+    }));
+    return $n(this$5.Lcats_Functor$ToFunctorOps$$anon$5__f_typeClassInstance).map__O__F1__O(this$5.Lcats_Functor$ToFunctorOps$$anon$5__f_self, f);
+  }));
+  return $n(this$6.Lcats_FlatMap$ToFlatMapOps$$anon$2__f_typeClassInstance).flatMap__O__F1__O(this$6.Lcats_FlatMap$ToFlatMapOps$$anon$2__f_self, f$1);
+});
 /** @constructor */
 function $c_Lcats_effect_std_Semaphore$impl$Request$(outer) {
   this.Lcats_effect_std_Semaphore$impl$Request$__f_$outer = null;
@@ -44026,6 +44320,16 @@ var $d_ju_Collections$UnmodifiableIterator = new $TypeData().initClass($c_ju_Col
   ju_Collections$WrappedIterator: 1,
   ju_Iterator: 1
 }));
+function $p_ju_Random__loop$1__I__I($thiz, n$1) {
+  while (true) {
+    var bits = $thiz.next__I__I(31);
+    var value = ((bits % $checkIntDivisor(n$1)) | 0);
+    if ((((((bits - value) | 0) + ((n$1 - 1) | 0)) | 0) < 0)) {
+    } else {
+      return value;
+    }
+  }
+}
 function $ct_ju_Random__J__($thiz, seed_in_$_lo, seed_in_$_hi) {
   $thiz.setSeed__J__V(seed_in_$_lo, seed_in_$_hi);
   return $thiz;
@@ -44068,6 +44372,13 @@ $c_ju_Random.prototype.next__I__I = (function(bits) {
   this.ju_Random__f_java$util$Random$$seed_$lo = lo$2;
   this.ju_Random__f_java$util$Random$$seed_$hi = hi$2;
   return ((hi$1 >>> ((-bits) | 0)) | 0);
+});
+$c_ju_Random.prototype.nextInt__I__I = (function(n) {
+  if ((n <= 0)) {
+    throw $ct_jl_IllegalArgumentException__T__(new $c_jl_IllegalArgumentException(), "n must be positive");
+  } else {
+    return (((n & ((-n) | 0)) === n) ? (this.next__I__I(31) >> Math.clz32(n)) : $p_ju_Random__loop$1__I__I(this, n));
+  }
 });
 var $d_ju_Random = new $TypeData().initClass($c_ju_Random, "java.util.Random", ({
   ju_Random: 1,
@@ -50120,6 +50431,24 @@ var $d_Lcats_effect_std_Queue$State = new $TypeData().initClass($c_Lcats_effect_
   s_Equals: 1,
   s_Product: 1,
   Ljava_io_Serializable: 1
+}));
+/** @constructor */
+function $c_Lcats_effect_std_Random$$anon$2(evidence$1$1, sRandom$1) {
+  this.Lcats_effect_std_Random$ScalaRandom__f_f = null;
+  this.Lcats_effect_std_Random$ScalaRandom__f_evidence$25 = null;
+  $ct_Lcats_effect_std_Random$ScalaRandom__O__Lcats_effect_kernel_Sync__(this, $n(evidence$1$1).pure__O__O(sRandom$1), evidence$1$1);
+}
+$c_Lcats_effect_std_Random$$anon$2.prototype = new $h_Lcats_effect_std_Random$ScalaRandom();
+$c_Lcats_effect_std_Random$$anon$2.prototype.constructor = $c_Lcats_effect_std_Random$$anon$2;
+/** @constructor */
+function $h_Lcats_effect_std_Random$$anon$2() {
+}
+$h_Lcats_effect_std_Random$$anon$2.prototype = $c_Lcats_effect_std_Random$$anon$2.prototype;
+var $d_Lcats_effect_std_Random$$anon$2 = new $TypeData().initClass($c_Lcats_effect_std_Random$$anon$2, "cats.effect.std.Random$$anon$2", ({
+  Lcats_effect_std_Random$$anon$2: 1,
+  Lcats_effect_std_Random$ScalaRandom: 1,
+  Lcats_effect_std_Random$RandomCommon: 1,
+  Lcats_effect_std_Random: 1
 }));
 /** @constructor */
 function $c_Lcats_effect_std_Semaphore$impl$Request(outer, n_$_lo, n_$_hi, gate) {
@@ -93573,6 +93902,8 @@ function $c_Lcalico_html_Html() {
   this.Lcalico_html_Html__f_h3bitmap$1 = false;
   this.Lcalico_html_Html__f_a$lzy1 = null;
   this.Lcalico_html_Html__f_abitmap$1 = false;
+  this.Lcalico_html_Html__f_button$lzy1 = null;
+  this.Lcalico_html_Html__f_buttonbitmap$1 = false;
   this.Lcalico_html_Html__f_p$lzy1 = null;
   this.Lcalico_html_Html__f_pbitmap$1 = false;
   this.Lcalico_html_Html__f_ul$lzy1 = null;
@@ -93636,6 +93967,13 @@ $c_Lcalico_html_Html.prototype.a__Lcalico_html_HtmlTag = (function() {
     this.Lcalico_html_Html__f_abitmap$1 = true;
   }
   return this.Lcalico_html_Html__f_a$lzy1;
+});
+$c_Lcalico_html_Html.prototype.button__Lcalico_html_HtmlTag = (function() {
+  if ((!this.Lcalico_html_Html__f_buttonbitmap$1)) {
+    this.Lcalico_html_Html__f_button$lzy1 = new $c_Lcalico_html_HtmlTag("button", false, this.Lcalico_html_Html__f_calico$html$HtmlTags$$x$1);
+    this.Lcalico_html_Html__f_buttonbitmap$1 = true;
+  }
+  return this.Lcalico_html_Html__f_button$lzy1;
 });
 $c_Lcalico_html_Html.prototype.p__Lcalico_html_HtmlTag = (function() {
   if ((!this.Lcalico_html_Html__f_pbitmap$1)) {
@@ -93984,6 +94322,8 @@ function $c_Lcalico_html_io$() {
   this.Lcalico_html_Html__f_h3bitmap$1 = false;
   this.Lcalico_html_Html__f_a$lzy1 = null;
   this.Lcalico_html_Html__f_abitmap$1 = false;
+  this.Lcalico_html_Html__f_button$lzy1 = null;
+  this.Lcalico_html_Html__f_buttonbitmap$1 = false;
   this.Lcalico_html_Html__f_p$lzy1 = null;
   this.Lcalico_html_Html__f_pbitmap$1 = false;
   this.Lcalico_html_Html__f_ul$lzy1 = null;
