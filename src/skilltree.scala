@@ -119,8 +119,11 @@ private def popover(r: TreeRung, close: IO[Unit]) =
     role       := List("dialog"),
     aria.label := r.name,
     styleAttr  := s"left: ${left}px; top: ${top}px; width: ${TreeLayout.PopoverWidth}px",
-    button(cls := "close", aria.label := "Close", onClick(close), "×"),
-    div(cls    := "meta", s"${TreeData.skills(r.column).name} · ${r.elo} Elo"),
+    div(
+      cls := "top",
+      div(cls    := "meta", s"${TreeData.skills(r.column).name} · ${r.elo} Elo"),
+      button(cls := "close", aria.label := "Close", onClick(close), "×")
+    ),
     h4(r.name),
     p(r.blurb),
     Option.when(needs.nonEmpty)(div(cls := "links", b("Needs "), needs.map(_.label).mkString(", "))),
@@ -291,10 +294,12 @@ private val treeCss = """
 }
 .skill-tree .popover h4 { margin: 2px 0 6px; }
 .skill-tree .popover p { margin: 0 0 8px; color: #374151; }
-.skill-tree .popover .meta { color: #6b7280; font-size: 12px; padding-right: 24px; }
+.skill-tree .popover .meta { color: #6b7280; font-size: 12px; }
 .skill-tree .popover .links { color: #374151; font-size: 12px; margin-top: 4px; }
+.skill-tree .popover .top { display: flex; align-items: flex-start; gap: 8px; }
+.skill-tree .popover .meta { flex: 1; }
 .skill-tree .popover .close {
-  position: absolute; top: 6px; right: 6px; border: none; background: none; padding: 2px 8px;
+  flex: none; margin: -4px -6px 0 0; border: none; background: none; padding: 0 6px;
   font-size: 18px; line-height: 1; color: #6b7280; cursor: pointer;
 }
 @media (prefers-reduced-motion: reduce) { .skill-tree * { transition: none !important; } }
