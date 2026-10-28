@@ -46,5 +46,6 @@ object WorkshopApp extends IOWebApp:
   case class Widget(name: String, id: String, content: Resource[IO, HtmlElement[IO]])
 
   def widgets = NonEmptyList.of(
-    Widget("Dorothy", "oz", oz)
+    Widget("Dorothy", "oz", oz),
+    Widget("Shell Game", "shell", w2)
   )
