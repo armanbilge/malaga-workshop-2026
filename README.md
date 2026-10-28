@@ -1,5 +1,5 @@
-# london-workshop-2026
-Collaborative project for the workshop at Typelevel Hack London in October 2026.
+# malaga-workshop-2026
+Collaborative project for the workshop at Typelevel Traverses Málaga in October 2026.
 
 ### Build
 ```
