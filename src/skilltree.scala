@@ -1,83 +1,180 @@
 import calico.*
+import calico.html.Modifier
 import calico.html.io.{*, given}
 import cats.effect.*
 import cats.syntax.all.*
 import fs2.concurrent.*
 import fs2.dom.*
+import org.scalajs.dom
 
+/** A static Elo skill tree drawn in SVG. Hover or focus highlights a rung's links; click or Enter opens its details. */
 def skillTree: Resource[IO, HtmlElement[IO]] =
-  SignallingRef[IO].of(Option.empty[TreeRung]).toResource.flatMap { selected =>
-    div(
-      cls := "skill-tree",
-      styleTag(treeCss),
+  (SignallingRef[IO].of(Option.empty[TreeRung]), SignallingRef[IO].of(Option.empty[TreeRung])).tupled.toResource
+    .flatMap { (selected, hovered) =>
+      // The rung whose links are highlighted: the one under the pointer or focus, else the open one.
+      val focus: Signal[IO, Option[TreeRung]] =
+        (hovered: Signal[IO, Option[TreeRung]], selected: Signal[IO, Option[TreeRung]]).mapN(_ orElse _)
+      val close = selected.set(None)
       div(
-        cls       := "canvas",
-        styleAttr := s"width: ${TreeLayout.Width}px; height: ${TreeLayout.Height}px",
-        TreeData.skills.map(s => div(cls := "header", styleAttr := TreeLayout.headerStyle(s.column), s.name)),
-        TreeData.ladders.map((a, b) => treeLine(a, b, "ladder")),
-        TreeData.needs.map((from, to) => treeLine(from, to, "needs")),
-        TreeData.rungs.map(rungButton(_, selected))
-      ),
-      div(children <-- selected.map[List[Resource[IO, Node[IO]]]](_.toList.map(rungDetails)))
-    )
+        cls := "skill-tree",
+        styleTag(treeCss),
+        onKeyDown --> (_.filter(_.key == "Escape").foreach(_ => close)),
+        div(
+          cls := "stage",
+          svgTag(
+            "svg",
+            (
+              "viewBox"    := s"0 0 ${TreeLayout.Width} ${TreeLayout.Height}",
+              "width"      := TreeLayout.Width.toString,
+              "height"     := TreeLayout.Height.toString,
+              "role"       := "group",
+              "aria-label" := "Skill tree. Tab through the rungs, Enter opens details, Escape closes them.",
+              svgTag("rect", ("class" := "backdrop", "width" := "100%", "height" := "100%", onClick(close))),
+              TreeLayout.ticks.map(tick),
+              TreeData.skills.map(header),
+              TreeData.ladders.map((a, b) => edge(a, b, "ladder", focus)),
+              TreeData.needs.map((a, b) => edge(a, b, "needs", focus)),
+              TreeData.rungs.map(rungNode(_, selected, hovered, focus))
+            )
+          ),
+          div(children <-- selected.map(_.toList.map(r => popover(r, close): Resource[IO, Node[IO]])))
+        )
+      )
+    }
+
+private def rungNode(
+    r: TreeRung,
+    selected: SignallingRef[IO, Option[TreeRung]],
+    hovered: SignallingRef[IO, Option[TreeRung]],
+    focus: Signal[IO, Option[TreeRung]]
+) =
+  val (x, y)  = TreeLayout.at(r)
+  val open    = selected.set(Some(r))
+  val classes = (selected: Signal[IO, Option[TreeRung]], focus).mapN { (s, f) =>
+    List("rung" -> true, "selected" -> s.contains(r), "linked" -> f.exists(TreeData.linked(_, r)))
+      .collect { case (c, true) =>
+        c
+      }
+      .mkString(" ")
   }
-
-private def rungButton(r: TreeRung, selected: SignallingRef[IO, Option[TreeRung]]) =
-  val needs = TreeData.prerequisites(r)
-  button(
-    tpe := "button",
-    cls <-- selected.map(s => "rung" :: Option.when(s.contains(r))("selected").toList),
-    styleAttr := TreeLayout.rungStyle(r),
-    title     := (if needs.isEmpty then r.name else s"${r.name}. Needs: ${needs.map(_.label).mkString(", ")}"),
-    onClick(selected.set(Some(r))), // a <button> also fires click on Enter and Space
-    span(cls := "elo", r.elo.toString),
-    r.name
+  svgTag(
+    "g",
+    (
+      "class" <-- classes,
+      "transform"  := s"translate($x,$y)",
+      "tabindex"   := "0",
+      "role"       := "button",
+      "aria-label" := s"${TreeData.skills(r.column).name}, ${r.elo} Elo: ${r.name}",
+      onClick(open),
+      onKeyDown --> (_.filter(e => e.key == "Enter" || e.key == " ").foreach(e => e.preventDefault *> open)),
+      onMouseEnter(hovered.set(Some(r))),
+      onMouseLeave(hovered.set(None)),
+      onFocus(hovered.set(Some(r))),
+      onBlur(hovered.set(None)),
+      svgTag("circle", ("class" := "ring", "r" := "15")),
+      svgTag("circle", ("class" := "dot", "r" := "11")),
+      svgTag("text", ("class" := "elo", "x" := "-24", "dy" := "0.35em", r.elo.toString)),
+      svgTag("text", ("class" := "name", "x" := "22", "dy" := "0.35em", r.name))
+    )
   )
 
-private def rungDetails(r: TreeRung) =
-  val needs = TreeData.prerequisites(r)
+private def edge(a: TreeRung, b: TreeRung, kind: String, focus: Signal[IO, Option[TreeRung]]) =
+  val (x1, y1) = TreeLayout.at(a)
+  val (x2, y2) = TreeLayout.at(b)
+  // Links bow below the row, so a link between rungs of equal Elo does not run through their labels.
+  val d =
+    if kind == "ladder" then s"M$x1,$y1 L$x2,$y2"
+    else s"M$x1,$y1 Q${(x1 + x2) / 2},${y1.max(y2) + 56} $x2,$y2"
+  svgTag(
+    "path",
+    ("d" := d, "class" <-- focus.map(f => s"edge $kind" + (if f.exists(r => r == a || r == b) then " hot" else "")))
+  )
+
+private def header(s: TreeSkill) =
+  val x = TreeLayout.columnX(s.column)
+  svgTag(
+    "text",
+    (
+      "class" := (if s.column == 1 then "header root" else "header"),
+      s.lines.zipWithIndex.map((line, i) => svgTag("tspan", ("x" := x.toString, "y" := (22 + i * 16).toString, line)))
+    )
+  )
+
+private def tick(elo: Int) =
+  val y = TreeLayout.y(elo)
+  svgTag(
+    "line",
+    ("class" := "tick", "x1" := "0", "x2" := TreeLayout.Width.toString, "y1" := y.toString, "y2" := y.toString)
+  )
+
+private def popover(r: TreeRung, close: IO[Unit]) =
+  val (x, y) = TreeLayout.at(r)
+  // Below the rung, so its own label stays readable; kept inside the tree horizontally.
+  val left    = (x - 24).max(0).min(TreeLayout.Width - TreeLayout.PopoverWidth)
+  val top     = y + 24
+  val needs   = TreeData.prerequisites(r)
+  val unlocks = TreeData.unlocks(r)
   div(
-    cls := "details",
-    h4(s"${r.name} (${r.elo})"),
-    small(s"${TreeData.skills(r.column).name} · ${EloBand.of(r.elo).label}"),
+    cls        := "popover",
+    role       := List("dialog"),
+    aria.label := r.name,
+    styleAttr  := s"left: ${left}px; top: ${top}px; width: ${TreeLayout.PopoverWidth}px",
+    button(cls := "close", aria.label := "Close", onClick(close), "×"),
+    div(cls    := "meta", s"${TreeData.skills(r.column).name} · ${r.elo} Elo"),
+    h4(r.name),
     p(r.blurb),
-    p(small(if needs.isEmpty then "No prerequisites from other skills."
-    else s"Needs: ${needs.map(_.label).mkString(", ")}"))
+    Option.when(needs.nonEmpty)(div(cls := "links", b("Needs "), needs.map(_.label).mkString(", "))),
+    Option.when(unlocks.nonEmpty)(div(cls := "links", b("Unlocks "), unlocks.map(_.label).mkString(", ")))
   )
 
-/** A straight line between two rung centres: a thin div, rotated. Calico 0.2.3 has no SVG DSL. */
-private def treeLine(a: TreeRung, b: TreeRung, kind: String) =
-  val (x1, y1) = TreeLayout.centre(a)
-  val (x2, y2) = TreeLayout.centre(b)
-  val length   = math.hypot(x2 - x1, y2 - y1)
-  val angle    = math.atan2(y2 - y1, x2 - x1)
-  div(
-    cls       := s"line $kind",
-    styleAttr := f"left: ${x1}%.1fpx; top: ${y1}%.1fpx; width: $length%.1fpx; transform: rotate($angle%.4frad)"
-  )
+// A tiny SVG layer: Calico 0.2.3 builds HTML elements only, so SVG ones are created in the SVG namespace and given
+// plain attributes, constant or driven by a Signal. Events and children use Calico's own modifiers unchanged.
+
+private def svgTag[M](tag: String, mods: M)(using M: Modifier[IO, Element[IO], M]): Resource[IO, Element[IO]] =
+  Resource
+    .eval(IO(dom.document.createElementNS("http://www.w3.org/2000/svg", tag).asInstanceOf[Element[IO]]))
+    .flatTap(M.modify(mods, _))
+
+private final case class SvgAttr(key: String, value: String)
+private final case class SvgAttrSignal(key: String, values: Signal[IO, String])
+
+extension (key: String)
+  private def :=(value: String): SvgAttr                     = SvgAttr(key, value)
+  private def <--(values: Signal[IO, String]): SvgAttrSignal = SvgAttrSignal(key, values)
+
+private def setAttr(e: Element[IO], key: String, value: String) =
+  IO(e.asInstanceOf[dom.Element].setAttribute(key, value))
+
+private given Modifier[IO, Element[IO], SvgAttr] = (a, e) => Resource.eval(setAttr(e, a.key, a.value))
+
+private given Modifier[IO, Element[IO], SvgAttrSignal] = (a, e) =>
+  a.values.getAndDiscreteUpdates.flatMap { (head, tail) =>
+    Resource.eval(setAttr(e, a.key, head)) *> tail.foreach(setAttr(e, a.key, _)).compile.drain.background.void
+  }
 
 // Model
 
-private case class TreeSkill(name: String, column: Int)
+private case class TreeSkill(name: String, column: Int, lines: List[String])
 
 private case class TreeRung(column: Int, elo: Int, name: String, blurb: String):
-  def label = s"${TreeData.skills(column).name} – $name ($elo)"
+  def label = s"${TreeData.skills(column).name}, $name ($elo)"
 
-private enum EloBand(val below: Int, val colour: String, val ink: String, val label: String):
-  case Novice       extends EloBand(600, "#3b3b4a", "#ffffff", "below 600")
-  case Apprentice   extends EloBand(1000, "#5b6bb0", "#ffffff", "600–1000")
-  case Practitioner extends EloBand(1400, "#8cc37a", "#1a1a1a", "1000–1400")
-  case Expert       extends EloBand(1800, "#e0a030", "#1a1a1a", "1400–1800")
-  case Master       extends EloBand(Int.MaxValue, "#ff4060", "#1a1a1a", "1800 and above")
+private object TreeLayout:
+  val Width        = 820
+  val Height       = 440
+  val PopoverWidth = 280
+  val elos         = List(1800, 1400, 1000, 600)
+  val ticks        = elos
 
-private object EloBand:
-  def of(elo: Int): EloBand = values.find(elo < _.below).getOrElse(Master)
+  def columnX(column: Int): Int   = 70 + column * 260
+  def y(elo: Int): Int            = 80 + elos.indexOf(elo) * 105
+  def at(r: TreeRung): (Int, Int) = (columnX(r.column), y(r.elo))
 
 private object TreeData:
   val skills = List(
-    TreeSkill("Understanding the Typelevel ecosystem", 0),
-    TreeSkill("Calico Developer", 1),
-    TreeSkill("Understanding the browser tech stack", 2)
+    TreeSkill("Understanding the Typelevel ecosystem", 0, List("Understanding the", "Typelevel ecosystem")),
+    TreeSkill("Calico Developer", 1, List("Calico Developer")),
+    TreeSkill("Understanding the browser tech stack", 2, List("Understanding the", "browser tech stack"))
   )
 
   val rungs = List(
@@ -97,7 +194,7 @@ private object TreeData:
       0,
       1400,
       "Resource, Stream, Signal",
-      "You pick the right Typelevel abstraction for lifetimes, sequences and state without looking it up."
+      "You pick the right abstraction for lifetimes, sequences and state without looking it up."
     ),
     TreeRung(
       0,
@@ -127,7 +224,7 @@ private object TreeData:
       1,
       1800,
       "Keyed children whisperer",
-      "You render keyed lists with children[K] and know exactly which nodes survive an update."
+      "You render keyed lists with children[K] and know which nodes survive an update."
     ),
     TreeRung(2, 600, "The page has a DOM", "You know HTML becomes a tree of nodes and that JavaScript can change it."),
     TreeRung(
@@ -140,7 +237,7 @@ private object TreeData:
       2,
       1400,
       "Fetch, WebSocket, history",
-      "You use the browser's network and navigation APIs and know what each one costs."
+      "You use the browser's network and navigation APIs and know what each costs."
     ),
     TreeRung(
       2,
@@ -155,7 +252,7 @@ private object TreeData:
   val ladders =
     rungs.groupBy(_.column).values.toList.flatMap(_.sortBy(_.elo).sliding(2).collect { case List(a, b) => (a, b) })
 
-  /** Dependency edges: (prerequisite in a sub-skill, root rung that needs it). */
+  /** Dependency edges: (prerequisite in a side skill, Calico rung that needs it). */
   val needs = List(
     rung(0, 1000) -> rung(1, 1000),
     rung(2, 1000) -> rung(1, 1000),
@@ -163,37 +260,42 @@ private object TreeData:
     rung(2, 1400) -> rung(1, 1800)
   )
 
-  def prerequisites(r: TreeRung) = needs.collect { case (from, `r`) => from }
-
-private object TreeLayout:
-  val Width     = 720
-  val Height    = 470
-  val RungWidth = 200
-  val Top       = 70 // below the column headers
-  val MinElo    = 300
-  val MaxElo    = 2000
-
-  def x(column: Int)      = Width / 6 + column * Width / 3
-  def y(elo: Int)         = Top + (MaxElo - elo).toDouble / (MaxElo - MinElo) * (Height - Top - 20)
-  def centre(r: TreeRung) = (x(r.column).toDouble, y(r.elo))
-
-  def headerStyle(column: Int) = s"left: ${x(column) - RungWidth / 2}px; width: ${RungWidth}px"
-
-  def rungStyle(r: TreeRung) =
-    val band = EloBand.of(r.elo)
-    f"left: ${x(r.column) - RungWidth / 2}px; top: ${y(r.elo)}%.1fpx; width: ${RungWidth}px; background: ${band.colour}; color: ${band.ink}"
+  def prerequisites(r: TreeRung)                    = needs.collect { case (from, `r`) => from }
+  def unlocks(r: TreeRung)                          = needs.collect { case (`r`, to) => to }
+  def linked(focus: TreeRung, r: TreeRung): Boolean =
+    focus == r || needs.contains(r -> focus) || needs.contains(focus -> r)
 
 private val treeCss = """
-  .skill-tree .canvas { position: relative; margin: 0 auto; }
-  .skill-tree .header { position: absolute; top: 0; text-align: center; font-weight: 600; line-height: 1.2; }
-  .skill-tree .line { position: absolute; height: 0; transform-origin: 0 0; pointer-events: none; }
-  .skill-tree .ladder { border-top: 4px solid #9a9aae; margin-top: -2px; }
-  .skill-tree .needs { border-top: 2px dashed #5a5a70; margin-top: -1px; }
-  .skill-tree .rung { position: absolute; margin: 0; padding: 4px 8px; transform: translateY(-50%);
-    font-size: 0.85em; line-height: 1.2; text-align: left; border: 2px solid transparent; border-radius: 8px; }
-  .skill-tree .rung:hover { filter: brightness(1.08); }
-  .skill-tree .rung.selected { border-color: #1a1a1a; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a1a1a; }
-  .skill-tree .elo { font-weight: 700; margin-right: 6px; }
-  .skill-tree .details { border: 1px solid #ddd; border-radius: 12px; padding: 8px 16px; margin-top: 12px; }
-  .skill-tree .details h4 { margin: 0; }
+.skill-tree .stage { position: relative; width: 820px; }
+.skill-tree svg { display: block; font-family: inherit; }
+.skill-tree .backdrop { fill: transparent; }
+.skill-tree .tick { stroke: #eceef2; stroke-width: 1; }
+.skill-tree .header { fill: #6b7280; font-size: 12px; font-weight: 600; text-anchor: middle; letter-spacing: 0.02em; }
+.skill-tree .header.root { fill: #111827; font-size: 14px; }
+.skill-tree .edge { fill: none; stroke: #d1d5db; stroke-width: 1.5; transition: stroke 0.15s; }
+.skill-tree .edge.needs { stroke-dasharray: 3 4; }
+.skill-tree .edge.hot { stroke: #2563eb; stroke-width: 2; }
+.skill-tree .rung { cursor: pointer; outline: none; }
+.skill-tree .rung .ring { fill: #fff; stroke: transparent; stroke-width: 2; transition: stroke 0.15s; }
+.skill-tree .rung .dot { fill: #fff; stroke: #374151; stroke-width: 2; transition: fill 0.15s; }
+.skill-tree .rung:hover .dot, .skill-tree .rung.linked .dot { fill: #dbeafe; stroke: #2563eb; }
+.skill-tree .rung:focus-visible .ring { stroke: #2563eb; }
+.skill-tree .rung.selected .dot { fill: #2563eb; stroke: #2563eb; }
+.skill-tree .elo { fill: #9ca3af; font-size: 11px; text-anchor: end; font-variant-numeric: tabular-nums; }
+.skill-tree .name, .skill-tree .elo { paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+.skill-tree .name { fill: #111827; font-size: 13px; }
+.skill-tree .rung.selected .name { font-weight: 600; }
+.skill-tree .popover {
+  position: absolute; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.12); padding: 12px 14px; font-size: 14px; z-index: 1;
+}
+.skill-tree .popover h4 { margin: 2px 0 6px; }
+.skill-tree .popover p { margin: 0 0 8px; color: #374151; }
+.skill-tree .popover .meta { color: #6b7280; font-size: 12px; padding-right: 24px; }
+.skill-tree .popover .links { color: #374151; font-size: 12px; margin-top: 4px; }
+.skill-tree .popover .close {
+  position: absolute; top: 6px; right: 6px; border: none; background: none; padding: 2px 8px;
+  font-size: 18px; line-height: 1; color: #6b7280; cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) { .skill-tree * { transition: none !important; } }
 """
