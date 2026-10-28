@@ -27852,11 +27852,11 @@ $c_LWorkshopApp$.prototype.render__Lcats_effect_kernel_Resource = (function() {
     var $x_11 = $n($m_Lcalico_html_io$().div__Lcalico_html_HtmlTag());
     var $x_4 = $n($m_Lcalico_html_io$().h1__Lcalico_html_HtmlTag());
     var Modifiers_this$3 = $m_Lcalico_html_io$();
-    var _1$2 = $x_4.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource("Calico Workshop at Typelevel Hack London 2026", Modifiers_this$3.Lcalico_html_Html__f_calico$html$Modifiers$$_forString);
+    var _1$2 = $x_4.apply__O__Lcalico_html_Modifier__Lcats_effect_kernel_Resource("Calico Workshop at Typelevel Traverses M\u00e1laga 2026", Modifiers_this$3.Lcalico_html_Html__f_calico$html$Modifiers$$_forString);
     var $x_8 = $n($m_Lcalico_html_io$().p__Lcalico_html_HtmlTag());
     var $x_7 = $n($m_Lcalico_html_io$().a__Lcalico_html_HtmlTag());
     var this$16 = $n($m_Lcalico_html_io$().href__Lcalico_html_HtmlAttr());
-    var _1$1 = new $c_Lcalico_html_HtmlAttr$ConstantModifier(this$16.Lcalico_html_HtmlAttr__f_key, this$16.Lcalico_html_HtmlAttr__f_encode, "https://github.com/armanbilge/london-workshop-2026");
+    var _1$1 = new $c_Lcalico_html_HtmlAttr$ConstantModifier(this$16.Lcalico_html_HtmlAttr__f_key, this$16.Lcalico_html_HtmlAttr__f_encode, "https://github.com/armanbilge/malaga-workshop-2026");
     var $x_6 = new $c_T2(_1$1, "Source code on GitHub");
     var gen$proxy3 = new $c_sr_TupleMirror(2);
     var is$1 = new $c_sr_AbstractFunction0_$$Lambda$07eded5776954a9c145e92c329afd52873ad179c((() => {
