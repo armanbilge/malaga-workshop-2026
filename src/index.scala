@@ -54,5 +54,6 @@ object WorkshopApp extends IOWebApp:
     Widget("Málaga Wine Lab", "malaga", malaga),
     Widget("Fibonacci", "fibonacci", fibonacci),
     Widget("Scala UI with Calico Development Skill Tree", "skill-tree", skillTree),
-    Widget("Jokes list", "jokes", jokes)
+    Widget("Jokes list", "jokes", jokes),
+    Widget("Math Quiz", "quiz", quiz)
   )
