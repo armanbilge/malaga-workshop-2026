@@ -50,6 +50,8 @@ object WorkshopApp extends IOWebApp:
 
   def widgets = NonEmptyList.of(
     Widget("Dorothy", "oz", oz),
+    Widget("Time Converter", "timeConverter", timeConverter),
+    Widget("Dorothy", "oz", oz),
     Widget("Shell Game", "shell", w2),
     Widget("Málaga Wine Lab", "malaga", malaga),
     Widget("Fibonacci", "fibonacci", fibonacci),
