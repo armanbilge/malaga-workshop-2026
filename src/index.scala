@@ -39,7 +39,7 @@ object WorkshopApp extends IOWebApp:
 
       div(
         h1("Calico Workshop at Typelevel Traverses Málaga 2026"),
-        p(a(href := "https://github.com/armanbilge/malaga-workshop-2026", "Source code on GitHub")),
+        p(a(href := "https://github.com/typelevel/malaga-workshop-2026", "Source code on GitHub")),
         h2("Choose a widget"),
         nav,
         routes.toResource.flatMap(router.dispatch)
